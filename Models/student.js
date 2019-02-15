@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 
 var StudentSchema = Schema({
     name: String,
-    carrer: String,
+    surname: String,
+    career: String,
     identity: String,
     teacher: {type: Schema.ObjectId, ref: 'Teacher'},
 });

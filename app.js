@@ -18,7 +18,7 @@ app.get('/prueba',(req, res)=>{
 
 // rutas
 app.use('/v1',teacher_routes);
-// app.use('/v2',student_routes);
+app.use('/v2',student_routes);
 
 // Cors
 app.use((req, res, next) => {

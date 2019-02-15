@@ -1,12 +1,13 @@
 'use strict'
 
 var express = require('express');
-var studentController = require('../Controllers/students');
+var StudentController = require('../Controllers/students');
 var md_auth = require('../Middlewares/authenticated');
+var api = express.Router();
 var multiparty = require('connect-multiparty');
 
-var md_upload = multiparty({uploadDir: './Uploads/students'});
+api.post('/student-save',StudentController.saveStudent);
+api.delete('/delete/:id', StudentController.deleteStudent);
+api.post('/list', StudentController.listStudent);
 
-var api = express.Router();
-
-api.get('/prueba', studentController.prueba);
+module.exports = api;
