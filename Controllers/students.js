@@ -1,4 +1,3 @@
-'use strict'
 
 'use strict'
 
@@ -17,7 +16,7 @@ function saveStudent(req,res){
         student.surname = params.surname;
         student.career = params.career;
         student.identity = params.identity;
-        student.teacher = null;
+        student.teacher = req.teacher.sub;
     
     student.save((err,studentSave)=>{
         if(err){
@@ -61,27 +60,33 @@ function listStudent(req, res){
 function updateStudent(req, res){
     var studentID = req.params.id;
     var update = req.body;
-
-    if(studentID != req.student.sub){
-        res.status(500).send({message: 'No tiene permiso para actualizar el profesor'});
-    }
-
-    Student.findByIdAndUpdate(studentID,update, {new:true}, (err, StudentUpdate) =>{
+    Student.findOneAndUpdate(studentID,update, {new:true}, (err, StudentUpdate) =>{
         if(err){
-            res.status(500).send({message: 'Error al actualizar el profesor'});
+            res.status(500).send({message: 'Error al actualizar el alumno'});
         }else{
             if(!StudentUpdate){
-                res.status(404).send({message:'No se ha podido actualizar el profesor'});
+                res.status(404).send({message:'No se ha podido actualizar el alumno'});
             }else{
                 res.status(200).send({student: StudentUpdate});
             }
         }
     });
 }
+function listarAlum (req,res){
+    var params = req.teacher.sub;
+    Student.find({teacher: params},(err,teachers)=>{
+        if(err){
+            res.status(500).send({message: 'Error al listar los alumnos'});
+        }else{
+            res.status(200).send(teachers);
+        }
+    })
+}
 
 module.exports = {
     saveStudent,
     deleteStudent,
     listStudent,
-    updateStudent
+    updateStudent,
+    listarAlum
 }

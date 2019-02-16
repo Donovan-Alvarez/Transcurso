@@ -6,8 +6,9 @@ var bcrypt = require('bcrypt-nodejs');
 var jwt = require('../Services/jwt');
 var multiparty = require('connect-multiparty');
 
-var fs=require('fs');
 var path = require('path');
+var fs=require('fs');
+
 
 function prueba(req, res){
     res.status(200).send({message: 'Probando servidor de teachers'});
@@ -22,7 +23,6 @@ function saveTeacher(req,res){
         teacher.surname = params.surname;
         teacher.email = params.email;
         teacher.role = 'ROLE_TEACHER';
-        teacher.imagen = null;
 
         Teacher.findOne({email: teacher.email.toLowerCase()}, (err, issetteacher)=>{
             if(err){
@@ -128,48 +128,54 @@ function updateTeacher(req, res){
         }
     });
 }
+// subir Documento
 function uploadDoc(req,res){
-    var teacherid = req.params.id;
+    var teacherId = req.params.id;
     var file_name = 'Archivo no subido';
-
+   
+  
     if(req.files){
-        var file_path = req.files.document.path;
-        var file_split = file_path.split('\\');
-        var file_name = file_split[2];
-
-        var ext_explit = file_name.split('\.');
-        var file_ext = ext_explit[1];
-
-        if(file_ext == 'txt' || file_ext == 'PDF' || file_ext =='docx'){
-            if(teacherid != req.teacher.sub){
-                res.status(500).send({message: 'No tiene permiso para modificar el usuario'});
-            }
-            Teacher.findByIdAndUpdate(teacherid, {document: file_name}, {new:true},(err, teacherUpdate)=>{
-                if(err){
-                    res.status(500).send({
-                        message:'Error al actualizar el usuario'});
-                }else{
-                    if(!teacherUpdate){
-                        res.status(404).send({
-                            message:'No se ha podido actualizar el usuario'});
-                    }else{
-                        res.status(200).send({teacher: teacherUpdate, document: file_name});
-                    }
-                }
-            });
-        }else{
-            fs.unlink(file_path,(err)=>{
-            if(err){
-                res.status(200).send({message:'Extensión no admitida, el archivo no se ha eliminado'});
+      var file_path = req.files.document.path;
+      var file_split = file_path.split('\\');
+      var file_name = file_split[2];
+  
+      var ext_explit = file_name.split('\.')
+      var file_ext = ext_explit[1];
+  
+      if(file_ext == 'pdf' || file_ext == 'txt'){
+        if(teacherId != req.teacher.sub){
+          res.status(500).send({
+            message: 'No tiene permiso para modificar el usuario'
+          });
+        }
+        Teacher.findByIdAndUpdate(teacherId, {document: file_name}, {new: true}, (err, teacherUpdate)=>{
+          if(err){
+            send.status(500).send({message: 'Error al actualizar el profesor'});
+          }else{
+            if(!teacherUpdate){
+              res.status(404).send({message: 'NO se ha podido actualizar el usuario'});
             }else{
-                res.status(200).send({message:'Extensión no admitida, archivo eliminado'});
-            }    
-        });    
-    }
+              res.status(200).send({teacher: teacherUpdate, document: file_name});
+            }
+          }
+        });
+      }else{
+        res.status(200).send({message: 'Extensión no admitida'});
+        fs.unlink(file_path, (err)=>{
+          if(err){
+          res.status(200).send({message: 'Extensión no es admitida y archivo no borrado'});
+        }else{
+          res.status(202).send({message: 'Extensión no admitida ...'});
+        }
+        });
+      }
     }else{
-        res.status(404).send({message: 'No se han subido archivos'});
+      res.status(404).send({message: 'No se ha subido archivos'});
     }
-}
+  }
+
+
+
 module.exports = {
     prueba,
     saveTeacher,

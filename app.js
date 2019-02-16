@@ -7,6 +7,7 @@ var app = express();
 // Rutas
 var teacher_routes = require('./Routes/teacher');
 var student_routes = require('./Routes/student');
+var carrera_routes = require('./Routes/carrera');
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -19,6 +20,7 @@ app.get('/prueba',(req, res)=>{
 // rutas
 app.use('/v1',teacher_routes);
 app.use('/v2',student_routes);
+app.use('/v3', carrera_routes);
 
 // Cors
 app.use((req, res, next) => {
