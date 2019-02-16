@@ -11,5 +11,5 @@ api.delete('/delete/:id', StudentController.deleteStudent);
 api.post('/list', StudentController.listStudent);
 api.put('/update/:id',md_auth.ensureAut, StudentController.updateStudent);
 api.post('/reporte',md_auth.ensureAut, StudentController.listarAlum);
-
+api.post('/login', StudentController.loginStuden);
 module.exports = api;

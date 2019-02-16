@@ -12,6 +12,7 @@ function saveCarrera(req,res){
     if(params.career && params.description){
         carrera.career = params.career;
         carrera.description = params.description;
+        carrera.student = req.teacher.sub;
     carrera.save((err,carreraSave)=>{
         if(err){
             res.status(500).send({message: 'No se ha guardado'});

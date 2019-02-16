@@ -11,7 +11,7 @@ exports.createToken = function(teacher){
         surname: teacher.surname,
         email: teacher.email,
         role: teacher.role,
-        image: teacher.image,
+        document: teacher.document,
         iat: moment().unix,
         exp: moment().add(30, 'days').unix
     };

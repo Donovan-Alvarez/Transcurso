@@ -6,9 +6,9 @@ var md_auth = require('../Middlewares/authenticated');
 var multiparty = require('connect-multiparty');
 var api = express.Router();
 
-api.get('/agregarCarrera', CarreraControler.saveCarrera);
+api.get('/agregarCarrera',md_auth.ensureAut, CarreraControler.saveCarrera);
 api.post('/listarCarrera',CarreraControler.listCarrera);
 api.delete('/eliminarCarrera/:id', CarreraControler.deleteCarrera);
-api.put('/updateCarrera/:id', CarreraControler.updateCarrera);
+api.put('/updateCarrera/:id', md_auth.ensureAut,CarreraControler.updateCarrera);
 
 module.exports = api;
