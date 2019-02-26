@@ -5,9 +5,9 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // Rutas
+var admin_routes = require('./Routes/admin');
 var teacher_routes = require('./Routes/teacher');
 var student_routes = require('./Routes/student');
-var carrera_routes = require('./Routes/carrera');
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -18,9 +18,9 @@ app.get('/prueba',(req, res)=>{
 });
 
 // rutas
-app.use('/v1',teacher_routes);
-app.use('/v2',student_routes);
-app.use('/v3', carrera_routes);
+ app.use('/v1',teacher_routes);
+ app.use('/v2',student_routes);
+app.use('/v', admin_routes);
 
 // Cors
 app.use((req, res, next) => {
